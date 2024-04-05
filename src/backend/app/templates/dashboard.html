@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../templates/static/style.css">
+</head>
+<body>
+    <h1>registros</h1>
+    
+    <!-- Botão para atualizar a lista de registros -->
+    <button hx-get="/dash" hx-swap="outerHTML">Atualizar Registros</button>
+    
+    <!-- Lista de registros -->
+    <ul id="registry-list">
+        {% for logs in logs %}
+            <li>{{ logs }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

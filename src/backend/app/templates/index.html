@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Log de Acesso</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Endpoint</th>
+                <th>Método</th>
+                <th>Dados</th>
+                <form hx-post="/echo" hx-target="#log-table" hx-swap="outerHTML">
+                    <label for="dados">Digite os dados:</label>
+                    <input type="text" id="dados" name="dados" required>
+                    <button type="submit">Enviar</button>
+                </form>
+                <h1>Todos os itens</h1>
+                <form action="/dash" method="get" hx-swap="none">
+                    <button type="submit">Ver Itens</button>
+                </form>
+            </tr>
+        </thead>
+        <tbody id="log-table">
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.endpoint }}</td>
+                <td>{{ log.method }}</td>
+                <td>{{ log.data.dados if log.data is defined else '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <script>
+        // Atualiza a tabela automaticamente a cada 5 segundos
+        setInterval(function() {
+            htmx.ajax('GET', '/info', { 
+                'update': '#log-table',
+                'headers': { 'Content-Type': 'application/json' }
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+</head>
+<body>
+    <h1>Log de Acesso</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Endpoint</th>
+                <th>Método</th>
+                <th>Dados</th>
+            </tr>
+        </thead>
+        <tbody id="log-table">
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.endpoint }}</td>
+                <td>{{ log.method }}</td>
+                <td>{{ log.data.dados if log.data is defined else '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form hx-post="/echo" hx-target="#log-table" hx-swap="outerHTML">
+        <label for="dados">Digite os dados:</label>
+        <input type="text" id="dados" name="dados" required>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html> -->
